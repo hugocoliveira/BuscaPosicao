@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Permissões necessárias -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Feature de câmera é desejável mas não obrigatória -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@null"
+        android:label="@string/app_name"
+        android:roundIcon="@null"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BuscaPosicao"
+        android:usesCleartextTraffic="true">
+
+        <!--
+            MainActivity sem intent-filter LAUNCHER — o app não aparece
+            na gaveta do Android. É chamado exclusivamente pelo MenuAutomatico
+            via Intent explícita com o package ID.
+        -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <!-- sem category LAUNCHER: ícone oculto -->
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

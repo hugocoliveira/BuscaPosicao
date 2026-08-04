@@ -1,0 +1,12 @@
+R_DEF: Internal format may change without notice
+local
+string app_name
+string botao_buscar
+string botao_escanear
+string campo_vazio
+string erro_app_nao_encontrado
+string erro_generico
+string hint_campo_busca
+string loading
+string permissao_camera_negada
+style Theme.BuscaPosicao
