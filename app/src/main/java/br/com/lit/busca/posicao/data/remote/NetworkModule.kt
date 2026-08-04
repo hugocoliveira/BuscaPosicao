@@ -23,9 +23,9 @@ object NetworkModule {
     private const val BASE_URL =
         "http://vm77.4hub.cloud:57700/sap/opu/odata4/sap/zsb_hco_busca_material/srvd_a2x/sap/zsd_hco_busca_material/0001/"
 
-    /** Credenciais Basic Auth fixas para o endpoint de posição */
-    private const val USERNAME = "HOLIVEIRA"
-    private const val PASSWORD = "*Hugo753951"
+    /** Credenciais SAP via BuildConfig — origem: local.properties (gitignored). */
+    private val USERNAME get() = br.com.lit.busca.posicao.BuildConfig.SAP_USERNAME
+    private val PASSWORD get() = br.com.lit.busca.posicao.BuildConfig.SAP_PASSWORD
 
     /**
      * Cliente OkHttp configurado com:

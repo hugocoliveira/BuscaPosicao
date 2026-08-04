@@ -24,6 +24,10 @@ android {
         versionName    = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Credenciais SAP — lidas do local.properties (gitignored), nunca expostas no código-fonte
+        buildConfigField("String", "SAP_USERNAME", "\"${localProps.getProperty("sap.username", "")}\"")
+        buildConfigField("String", "SAP_PASSWORD", "\"${localProps.getProperty("sap.password", "")}\"")
     }
 
     // Assinatura release — valores vêm do local.properties, nunca hardcoded no git
@@ -57,7 +61,8 @@ android {
     }
 
     buildFeatures {
-        compose = true
+        compose      = true
+        buildConfig  = true
     }
 }
 
