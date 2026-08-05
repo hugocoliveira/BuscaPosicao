@@ -11,7 +11,15 @@ class PosicaoRepository {
         return runCatching {
             val resposta = api.buscarPosicao(lgpla)
 
-            // Filtra metadados OData (@odata.context, @odata.etag etc.)
+            // Resposta de coleção OData: { "value": [...] }
+            // Quando a posição não existe a API retorna value:[] — tratar como lista vazia.
+            if (resposta.has("value")) {
+                val arr = resposta.getAsJsonArray("value")
+                return@runCatching if (arr.isEmpty) emptyList()
+                                   else arr.map { it.asJsonObject }
+            }
+
+            // Objeto único — filtra metadados OData (@odata.context, @odata.etag etc.)
             val filtrado = JsonObject()
             resposta.entrySet()
                 .filter { !it.key.startsWith("@") }

@@ -19,12 +19,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.gson.JsonObject
 
+/**
+ * Card de resultado de posição SAP.
+ * Exibe os campos do JSON com labels em português e datas formatadas.
+ * Campos internos (Lgnum) são omitidos; Lgpla aparece no cabeçalho.
+ */
 @Composable
 fun ResultCard(
     objeto: JsonObject,
     indice: Int,
     modifier: Modifier = Modifier
 ) {
+    val lgpla = objeto.str("Lgpla") ?: "—"
+
     Card(
         modifier  = modifier
             .fillMaxWidth()
@@ -36,8 +43,10 @@ fun ResultCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
+
+            // Cabeçalho: posição encontrada
             Text(
-                text       = "Item ${indice + 1}",
+                text       = "Posição: $lgpla",
                 style      = MaterialTheme.typography.titleMedium,
                 color      = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
@@ -45,43 +54,75 @@ fun ResultCard(
 
             Spacer(modifier = Modifier.height(4.dp))
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+            Spacer(modifier = Modifier.height(6.dp))
+
+            // Campos principais
+            CampoLinha("Tipo de depósito",   objeto.str("StorageType"))
+            CampoLinha("Área armazmto.",      objeto.str("StorageArea"))
+            CampoLinha("Tp.posição depósito", objeto.str("StorageBinType"))
+            CampoLinha("Nº UCs",              objeto.str("NumberOfHUs"))
+            CampoLinha("Peso",                objeto.str("Weight"))
+            CampoLinha("Unidade do peso",     objeto.str("WeightUnit"))
+            CampoLinha("Volume",              objeto.str("Volume"))
+            CampoLinha("Unidade volume",      objeto.str("VolumeUnit"))
+
+            Spacer(modifier = Modifier.height(6.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+            Spacer(modifier = Modifier.height(6.dp))
+
+            // Último movimento — data e hora separados e formatados
+            CampoLinha("Último movimento (data)", formatarData(objeto.str("MovedAtDate")))
+            CampoLinha("Último movimento (hora)", formatarHora(objeto.str("MovedAtTime")))
+
             Spacer(modifier = Modifier.height(4.dp))
 
-            objeto.entrySet().forEach { (chave, elemento) ->
-                val valorTexto = when {
-                    elemento == null || elemento.isJsonNull -> "—"
-                    elemento.isJsonPrimitive               -> elemento.asString
-                    else                                   -> elemento.toString()
-                }
-                CampoLinha(chave = formatarChave(chave), valor = valorTexto)
-                Spacer(modifier = Modifier.height(2.dp))
-            }
+            // Última contagem — null CountDate exibe "—" em ambas as linhas
+            val countData = formatarData(objeto.str("CountDate"))
+            CampoLinha("Últ. contagem (data)", countData)
+            CampoLinha("Últ. contagem (hora)", if (countData == "—") "—" else formatarHora(objeto.str("CountTime")))
         }
     }
 }
 
 @Composable
-private fun CampoLinha(chave: String, valor: String) {
+private fun CampoLinha(label: String, valor: String?) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text       = "$chave:",
+            text       = "$label:",
             style      = MaterialTheme.typography.bodySmall,
             color      = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Medium,
-            modifier   = Modifier.width(120.dp)
+            modifier   = Modifier.width(160.dp)
         )
         Spacer(modifier = Modifier.width(6.dp))
         Text(
-            text     = valor,
+            text     = valor ?: "—",
             style    = MaterialTheme.typography.bodyMedium,
             color    = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
     }
+    Spacer(modifier = Modifier.height(2.dp))
 }
 
-private fun formatarChave(chave: String): String =
-    chave
-        .replace("_", " ")
-        .replace(Regex("([a-z])([A-Z])")) { r -> "${r.groupValues[1]} ${r.groupValues[2]}" }
-        .trim()
+/** Extrai string de um campo JsonObject; retorna null se ausente, nulo ou vazio. */
+private fun JsonObject.str(key: String): String? {
+    val el = this.get(key) ?: return null
+    if (el.isJsonNull) return null
+    val s = el.asString
+    return if (s.isBlank() || s == "null") null else s
+}
+
+/** "2022-11-17" → "17/11/2022". Null ou inválido → "—". */
+private fun formatarData(raw: String?): String {
+    if (raw == null) return "—"
+    val p = raw.split("-")
+    return if (p.size == 3) "${p[2]}/${p[1]}/${p[0]}" else raw
+}
+
+/** "09:07:40" → "09:07". Null → "—". */
+private fun formatarHora(raw: String?): String {
+    if (raw == null) return "—"
+    val p = raw.split(":")
+    return if (p.size >= 2) "${p[0]}:${p[1]}" else raw
+}
