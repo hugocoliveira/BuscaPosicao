@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Busca Posição</string>
+    <string name="titulo_tela">Busca Posição</string>
+
+    <string name="label_campo_busca">Código ou posição</string>
     <string name="hint_campo_busca">Digite ou escaneie a posição</string>
+    <string name="placeholder_campo_busca">Digite ou escaneie a posição</string>
     <string name="botao_buscar">Buscar</string>
+    <string name="botao_limpar">Limpar</string>
+    <string name="descricao_icone_scanner">Abrir câmera para escanear código</string>
     <string name="botao_escanear">Escanear QR / Código de barras</string>
+
+    <string name="buscando">Buscando…</string>
     <string name="loading">Buscando…</string>
+    <string name="nenhum_resultado">Nenhum resultado encontrado.</string>
+    <string name="tentar_novamente">Tentar novamente</string>
+
     <string name="erro_generico">Erro ao buscar dados. Verifique a conexão.</string>
     <string name="erro_app_nao_encontrado">Nenhum resultado encontrado para esta posição.</string>
     <string name="permissao_camera_negada">Permissão de câmera negada. Conceda nas configurações do dispositivo.</string>
     <string name="campo_vazio">Digite ou escaneie um valor para buscar.</string>
+    <string name="fechar_scanner">Fechar scanner</string>
 </resources>
