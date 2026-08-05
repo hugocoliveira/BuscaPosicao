@@ -2,6 +2,7 @@ package br.com.lit.busca.posicao.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import br.com.lit.busca.posicao.ui.theme.BuscaPosicaoTheme
@@ -22,7 +23,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Habilita layout edge-to-edge (conteúdo sob status/navigation bar)
+        // Ao pressionar voltar: encerra a Activity e remove a task dos recentes,
+        // evitando que o app fique aberto em segundo plano após retornar ao MenuAutomatico.
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishAndRemoveTask()
+            }
+        })
+
         enableEdgeToEdge()
 
         setContent {
