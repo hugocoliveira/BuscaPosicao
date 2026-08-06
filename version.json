@@ -1,6 +1,6 @@
 ﻿{
-  "versionCode": 9,
-  "versionName": "1.8",
-  "apkUrl": "https://github.com/hugocoliveira/BuscaPosicao/releases/download/v1.8/app-release.apk",
-  "releaseNotes": "fix: desmembra campo moved_at em data e hora na Ult. contagem."
+  "versionCode": 10,
+  "versionName": "1.9",
+  "apkUrl": "https://github.com/hugocoliveira/BuscaPosicao/releases/download/v1.9/app-release.apk",
+  "releaseNotes": "diag: exibe todos os campos da API para identificar nome do campo de contagem."
 }

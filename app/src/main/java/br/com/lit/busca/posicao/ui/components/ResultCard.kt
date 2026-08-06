@@ -80,6 +80,20 @@ fun ResultCard(
             val (contData, contHora) = splitDataHora(objeto.str("moved_at"))
             CampoLinha("Últ. contagem (data)", contData)
             CampoLinha("Últ. contagem (hora)", contHora)
+
+            // === DIAGNÓSTICO TEMPORÁRIO — remover após confirmar os campos ===
+            Spacer(modifier = Modifier.height(6.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text  = "Campos da API:",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary
+            )
+            objeto.entrySet().forEach { (chave, valor) ->
+                CampoLinha(chave, valor.toString().take(40))
+            }
+            // === FIM DIAGNÓSTICO ===
         }
     }
 }
