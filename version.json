@@ -1,6 +1,6 @@
 ﻿{
-  "versionCode": 10,
-  "versionName": "1.9",
-  "apkUrl": "https://github.com/hugocoliveira/BuscaPosicao/releases/download/v1.9/app-release.apk",
-  "releaseNotes": "diag: exibe todos os campos da API para identificar nome do campo de contagem."
+  "versionCode": 11,
+  "versionName": "2.0",
+  "apkUrl": "https://github.com/hugocoliveira/BuscaPosicao/releases/download/v2.0/app-release.apk",
+  "releaseNotes": "fix: remove campos Ult. contagem (IDATU vazio no SAP) e diagnostico."
 }
