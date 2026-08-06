@@ -1,6 +1,6 @@
 ﻿{
-  "versionCode": 8,
-  "versionName": "1.7",
-  "apkUrl": "https://github.com/hugocoliveira/BuscaPosicao/releases/download/v1.7/app-release.apk",
-  "releaseNotes": "perf: reduz tamanho do APK com abiFilters arm64/arm32."
+  "versionCode": 9,
+  "versionName": "1.8",
+  "apkUrl": "https://github.com/hugocoliveira/BuscaPosicao/releases/download/v1.8/app-release.apk",
+  "releaseNotes": "fix: desmembra campo moved_at em data e hora na Ult. contagem."
 }

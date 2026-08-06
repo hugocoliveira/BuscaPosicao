@@ -76,10 +76,10 @@ fun ResultCard(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Última contagem — null CountDate exibe "—" em ambas as linhas
-            val countData = formatarData(objeto.str("CountDate"))
-            CampoLinha("Últ. contagem (data)", countData)
-            CampoLinha("Últ. contagem (hora)", if (countData == "—") "—" else formatarHora(objeto.str("CountTime")))
+            // Última contagem — campo moved_at contém data e hora juntas (ex: "2021-06-09T05:21:12")
+            val (contData, contHora) = splitDataHora(objeto.str("moved_at"))
+            CampoLinha("Últ. contagem (data)", contData)
+            CampoLinha("Últ. contagem (hora)", contHora)
         }
     }
 }
@@ -111,6 +111,18 @@ private fun JsonObject.str(key: String): String? {
     if (el.isJsonNull) return null
     val s = el.asString
     return if (s.isBlank() || s == "null") null else s
+}
+
+/**
+ * Separa um campo combinado de data+hora (ex: "2021-06-09T05:21:12" ou "2021-06-09 05:21:12")
+ * em um par (dataFormatada, horaFormatada). Null ou formato inesperado → ("—", "—").
+ */
+private fun splitDataHora(raw: String?): Pair<String, String> {
+    if (raw == null) return "—" to "—"
+    val sep = if (raw.contains("T")) "T" else " "
+    val partes = raw.split(sep, limit = 2)
+    return if (partes.size == 2) formatarData(partes[0]) to formatarHora(partes[1])
+           else raw to "—"
 }
 
 /** "2022-11-17" → "17/11/2022". Null ou inválido → "—". */
