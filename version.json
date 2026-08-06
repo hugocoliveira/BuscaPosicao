@@ -1,6 +1,6 @@
-{
-  "versionCode": 6,
-  "versionName": "1.5",
-  "apkUrl": "https://github.com/hugocoliveira/BuscaPosicao/releases/download/v1.5/app-release.apk",
-  "releaseNotes": ""
+﻿{
+  "versionCode": 8,
+  "versionName": "1.7",
+  "apkUrl": "https://github.com/hugocoliveira/BuscaPosicao/releases/download/v1.7/app-release.apk",
+  "releaseNotes": "perf: reduz tamanho do APK com abiFilters arm64/arm32."
 }

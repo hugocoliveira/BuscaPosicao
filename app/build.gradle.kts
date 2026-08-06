@@ -20,14 +20,15 @@ android {
         applicationId  = "br.com.lit.busca.posicao"
         minSdk         = 24
         targetSdk      = 36
-        versionCode    = 7
-        versionName    = "1.6"
+        versionCode    = 8
+        versionName    = "1.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // Credenciais SAP — lidas do local.properties (gitignored), nunca expostas no código-fonte
         buildConfigField("String", "SAP_USERNAME", "\"${localProps.getProperty("sap.username", "")}\"")
         buildConfigField("String", "SAP_PASSWORD", "\"${localProps.getProperty("sap.password", "")}\"")
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
     }
 
     // Assinatura release — valores vêm do local.properties, nunca hardcoded no git
