@@ -41,6 +41,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -123,10 +125,16 @@ private fun ConteudoPrincipal(
     onAbrirScanner: () -> Unit
 ) {
     val context = LocalContext.current
+    val focusRequester = remember { FocusRequester() }
     val nenhumResultado = !uiState.carregando
         && uiState.resultados.isEmpty()
         && uiState.campoBusca.isNotBlank()
         && uiState.erro == null
+
+    // Retorna foco ao campo após exibir resultados para leitura imediata do próximo código
+    LaunchedEffect(uiState.resultados) {
+        if (uiState.resultados.isNotEmpty()) runCatching { focusRequester.requestFocus() }
+    }
 
     LaunchedEffect(nenhumResultado) {
         if (nenhumResultado) {
@@ -152,7 +160,7 @@ private fun ConteudoPrincipal(
                     onBuscar       = onBuscar,
                     onAbrirScanner = onAbrirScanner,
                     onLimpar       = onLimpar,
-                    modifier       = Modifier.fillMaxWidth()
+                    modifier       = Modifier.fillMaxWidth().focusRequester(focusRequester)
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))

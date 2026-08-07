@@ -1,1 +1,1 @@
-{"versionCode":11,"versionName":"2.0","apkUrl":"https://github.com/hugocoliveira/BuscaPosicao/releases/download/v2.0/app-release.apk","releaseNotes":"fix: remove campos Ult. contagem (IDATU vazio no SAP)."}
+﻿{"versionCode":12,"versionName":"2.1","apkUrl":"https://github.com/hugocoliveira/BuscaPosicao/releases/download/v2.1/app-release.apk","releaseNotes":"feat: limpa campo e retorna foco apos exibir resultado."}

@@ -59,7 +59,7 @@ class BuscaPosicaoViewModel : ViewModel() {
 
             repositorio.buscarPosicao(valor).fold(
                 onSuccess = { lista ->
-                    _uiState.update { it.copy(carregando = false, resultados = lista) }
+                    _uiState.update { it.copy(carregando = false, resultados = lista, campoBusca = "") }
                 },
                 onFailure = { excecao ->
                     _uiState.update {
