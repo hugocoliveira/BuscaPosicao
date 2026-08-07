@@ -70,8 +70,15 @@ class BuscaPosicaoViewModel : ViewModel() {
                     }
                 },
                 onFailure = { excecao ->
-                    _uiState.update {
-                        it.copy(carregando = false, erro = excecao.message ?: "Erro desconhecido")
+                    // HTTP 400 do SAP significa que o código não existe — trata como sem resultado
+                    if (excecao.message?.contains("400") == true) {
+                        _uiState.update {
+                            it.copy(carregando = false, campoBusca = "", semResultados = true)
+                        }
+                    } else {
+                        _uiState.update {
+                            it.copy(carregando = false, erro = excecao.message ?: "Erro desconhecido")
+                        }
                     }
                 }
             )
