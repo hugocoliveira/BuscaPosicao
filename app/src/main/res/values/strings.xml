@@ -13,7 +13,7 @@
 
     <string name="buscando">Buscando…</string>
     <string name="loading">Buscando…</string>
-    <string name="nenhum_resultado">Nenhum resultado encontrado.</string>
+    <string name="nenhum_resultado">Dado não encontrado</string>
     <string name="tentar_novamente">Tentar novamente</string>
 
     <string name="erro_generico">Erro ao buscar dados. Verifique a conexão.</string>

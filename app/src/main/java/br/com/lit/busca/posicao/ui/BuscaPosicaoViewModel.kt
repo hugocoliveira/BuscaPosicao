@@ -59,7 +59,9 @@ class BuscaPosicaoViewModel : ViewModel() {
 
             repositorio.buscarPosicao(valor).fold(
                 onSuccess = { lista ->
-                    _uiState.update { it.copy(carregando = false, resultados = lista, campoBusca = "") }
+                    // Limpa o campo só quando há resultados — sem resultados mantém o texto
+                    // para que a condição nenhumResultado dispare som e mensagem de erro
+                    _uiState.update { it.copy(carregando = false, resultados = lista, campoBusca = if (lista.isNotEmpty()) "" else it.campoBusca) }
                 },
                 onFailure = { excecao ->
                     _uiState.update {
