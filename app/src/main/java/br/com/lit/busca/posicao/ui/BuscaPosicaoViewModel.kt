@@ -16,7 +16,8 @@ data class BuscaUiState(
     val carregando: Boolean          = false,
     val erro: String?                = null,
     val resultados: List<JsonObject> = emptyList(),
-    val scannerAberto: Boolean       = false
+    val scannerAberto: Boolean       = false,
+    val semResultados: Boolean       = false
 )
 
 class BuscaPosicaoViewModel : ViewModel() {
@@ -55,20 +56,22 @@ class BuscaPosicaoViewModel : ViewModel() {
 
     private fun buscar(valor: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update { it.copy(carregando = true, erro = null, resultados = emptyList()) }
+            _uiState.update { it.copy(carregando = true, erro = null, resultados = emptyList(), semResultados = false) }
 
             repositorio.buscarPosicao(valor).fold(
                 onSuccess = { lista ->
-                    // Limpa o campo só quando há resultados — sem resultados mantém o texto
-                    // para que a condição nenhumResultado dispare som e mensagem de erro
-                    _uiState.update { it.copy(carregando = false, resultados = lista, campoBusca = if (lista.isNotEmpty()) "" else it.campoBusca) }
+                    _uiState.update {
+                        it.copy(
+                            carregando    = false,
+                            resultados    = lista,
+                            campoBusca    = "",
+                            semResultados = lista.isEmpty()
+                        )
+                    }
                 },
                 onFailure = { excecao ->
                     _uiState.update {
-                        it.copy(
-                            carregando = false,
-                            erro = excecao.message ?: "Erro desconhecido"
-                        )
+                        it.copy(carregando = false, erro = excecao.message ?: "Erro desconhecido")
                     }
                 }
             )

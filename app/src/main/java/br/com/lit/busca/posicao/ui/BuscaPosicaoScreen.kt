@@ -126,22 +126,20 @@ private fun ConteudoPrincipal(
 ) {
     val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
-    val nenhumResultado = !uiState.carregando
-        && uiState.resultados.isEmpty()
-        && uiState.campoBusca.isNotBlank()
-        && uiState.erro == null
+
+    // Toca som e retorna foco quando busca não encontra resultados
+    LaunchedEffect(uiState.semResultados) {
+        if (uiState.semResultados) {
+            val mp = MediaPlayer.create(context, R.raw.error)
+            mp?.start()
+            mp?.setOnCompletionListener { it.release() }
+            runCatching { focusRequester.requestFocus() }
+        }
+    }
 
     // Retorna foco ao campo após exibir resultados para leitura imediata do próximo código
     LaunchedEffect(uiState.resultados) {
         if (uiState.resultados.isNotEmpty()) runCatching { focusRequester.requestFocus() }
-    }
-
-    LaunchedEffect(nenhumResultado) {
-        if (nenhumResultado) {
-            val mp = MediaPlayer.create(context, R.raw.error)
-            mp?.start()
-            mp?.setOnCompletionListener { it.release() }
-        }
     }
 
     LazyColumn(
@@ -232,7 +230,7 @@ private fun ConteudoPrincipal(
         }
 
         // Nenhum resultado — som emitido via LaunchedEffect acima
-        if (nenhumResultado) {
+        if (uiState.semResultados) {
             item {
                 Box(
                     modifier         = Modifier
