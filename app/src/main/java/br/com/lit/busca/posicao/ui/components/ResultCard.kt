@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,8 +30,6 @@ fun ResultCard(
     indice: Int,
     modifier: Modifier = Modifier
 ) {
-    val lgpla = objeto.str("Lgpla") ?: "—"
-
     // Pares (label abreviado, valor) na ordem de exibição
     val campos = listOf(
         "Material"   to objeto.str("Material"),
@@ -59,18 +56,6 @@ fun ResultCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
-
-            // Cabeçalho — posição encontrada
-            Text(
-                text       = "Posição: $lgpla",
-                style      = MaterialTheme.typography.titleMedium,
-                color      = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(Modifier.height(4.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-            Spacer(Modifier.height(8.dp))
 
             // Grid 3 colunas — 5 linhas para 15 campos, cabe sem scroll
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
