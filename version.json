@@ -1,1 +1,1 @@
-{"versionCode":23,"versionName":"3.2","apkUrl":"https://github.com/hugocoliveira/BuscaPosicao/releases/download/v3.2/app-release.apk","releaseNotes":"feat: cursor no campo ao abrir, teclado sempre fechado apos leitura."}
+{"versionCode":24,"versionName":"3.3","apkUrl":"https://github.com/hugocoliveira/BuscaPosicao/releases/download/v3.3/app-release.apk","releaseNotes":"fix: scanner Zebra infravermelho nao abre teclado virtual."}

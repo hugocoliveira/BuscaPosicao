@@ -13,6 +13,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,10 +32,14 @@ fun ScannerField(
     onLimpar: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     OutlinedTextField(
         value         = valor,
         onValueChange = onValorChange,
-        modifier      = modifier,
+        modifier      = modifier.onKeyEvent { keyEvent ->
+            if (keyEvent.type == KeyEventType.KeyDown) keyboardController?.hide()
+            false
+        },
         label         = { Text(stringResource(R.string.label_campo_busca)) },
         placeholder   = { Text(stringResource(R.string.placeholder_campo_busca)) },
         singleLine    = true,
