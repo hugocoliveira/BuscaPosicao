@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Busca Posição</string>
-    <string name="titulo_tela">Busca Posição</string>
+    <string name="titulo_tela">Posição</string>
 
     <string name="label_campo_busca">Código ou posição</string>
     <string name="hint_campo_busca">Digite ou escaneie a posição</string>
