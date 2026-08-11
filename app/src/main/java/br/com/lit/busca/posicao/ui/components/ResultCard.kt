@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.google.gson.JsonObject
 
@@ -71,13 +72,16 @@ fun ResultCard(
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
             Spacer(Modifier.height(8.dp))
 
-            // Grid 2 colunas
+            // Grid 3 colunas — 5 linhas para 15 campos, cabe sem scroll
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                campos.chunked(2).forEach { par ->
+                campos.chunked(3).forEach { grupo ->
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        CampoCell(par[0].first, par[0].second, Modifier.weight(1f))
-                        Spacer(Modifier.width(16.dp))
-                        if (par.size > 1) CampoCell(par[1].first, par[1].second, Modifier.weight(1f))
+                        CampoCell(grupo[0].first, grupo[0].second, Modifier.weight(1f))
+                        Spacer(Modifier.width(8.dp))
+                        if (grupo.size > 1) CampoCell(grupo[1].first, grupo[1].second, Modifier.weight(1f))
+                        else Spacer(Modifier.weight(1f))
+                        Spacer(Modifier.width(8.dp))
+                        if (grupo.size > 2) CampoCell(grupo[2].first, grupo[2].second, Modifier.weight(1f))
                         else Spacer(Modifier.weight(1f))
                     }
                 }
@@ -92,10 +96,11 @@ fun ResultCard(
 private fun CampoCell(label: String, valor: String?, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
-            text       = label,
-            style      = MaterialTheme.typography.bodySmall,
-            color      = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontWeight = FontWeight.Bold
+            text           = label,
+            style          = MaterialTheme.typography.bodySmall,
+            color          = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight     = FontWeight.Bold,
+            textDecoration = TextDecoration.Underline
         )
         Text(
             text  = valor ?: "—",
