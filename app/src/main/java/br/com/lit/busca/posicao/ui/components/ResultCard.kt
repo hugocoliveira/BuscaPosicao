@@ -1,5 +1,6 @@
 package br.com.lit.busca.posicao.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,8 +22,7 @@ import com.google.gson.JsonObject
 
 /**
  * Card de resultado de posição SAP.
- * Exibe os campos do JSON com labels em português e datas formatadas.
- * Campos internos (Lgnum) são omitidos; Lgpla aparece no cabeçalho.
+ * Exibe os 16 campos da API em grid de 2 colunas com labels abreviados em negrito.
  */
 @Composable
 fun ResultCard(
@@ -32,91 +32,96 @@ fun ResultCard(
 ) {
     val lgpla = objeto.str("Lgpla") ?: "—"
 
+    // Pares (label abreviado, valor) na ordem de exibição
+    val campos = listOf(
+        "Armazém"    to objeto.str("Lgnum"),
+        "Tp. Armaz." to objeto.str("StorageType"),
+        "Área"       to objeto.str("StorageArea"),
+        "Tp. Bin"    to objeto.str("StorageBinType"),
+        "Nº UCs"     to objeto.str("NumberOfHUs"),
+        "Peso"       to objeto.str("Weight"),
+        "Un. Peso"   to objeto.str("WeightUnit"),
+        "Volume"     to objeto.str("Volume"),
+        "Un. Vol."   to objeto.str("VolumeUnit"),
+        "Dt. Mov."   to formatarData(objeto.str("MovedAtDate")),
+        "Hr. Mov."   to formatarHora(objeto.str("MovedAtTime")),
+        "Dt. Cont."  to formatarData(objeto.str("CountDate")),
+        "Hr. Cont."  to formatarHora(objeto.str("CountTime")),
+        "Material"   to objeto.str("Material"),
+        "Descrição"  to objeto.str("MaterialDescription")
+    )
+
     Card(
-        modifier  = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+        modifier  = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
         shape     = RoundedCornerShape(6.dp),
-        colors    = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
+        colors    = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
 
-            // Cabeçalho: posição encontrada
+            // Cabeçalho — posição encontrada
             Text(
                 text       = "Posição: $lgpla",
                 style      = MaterialTheme.typography.titleMedium,
                 color      = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(Modifier.height(4.dp))
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(Modifier.height(8.dp))
 
-            // Campos principais
-            CampoLinha("Tipo de depósito",   objeto.str("StorageType"))
-            CampoLinha("Área armazmto.",      objeto.str("StorageArea"))
-            CampoLinha("Tp.posição depósito", objeto.str("StorageBinType"))
-            CampoLinha("Nº UCs",              objeto.str("NumberOfHUs"))
-            CampoLinha("Peso",                objeto.str("Weight"))
-            CampoLinha("Unidade do peso",     objeto.str("WeightUnit"))
-            CampoLinha("Volume",              objeto.str("Volume"))
-            CampoLinha("Unidade volume",      objeto.str("VolumeUnit"))
+            // Grid 2 colunas
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                campos.chunked(2).forEach { par ->
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        CampoCell(par[0].first, par[0].second, Modifier.weight(1f))
+                        Spacer(Modifier.width(16.dp))
+                        if (par.size > 1) CampoCell(par[1].first, par[1].second, Modifier.weight(1f))
+                        else Spacer(Modifier.weight(1f))
+                    }
+                }
+            }
 
-            Spacer(modifier = Modifier.height(6.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-            Spacer(modifier = Modifier.height(6.dp))
-
-            // Último movimento — data e hora separados e formatados
-            CampoLinha("Último movimento (data)", formatarData(objeto.str("MovedAtDate")))
-            CampoLinha("Último movimento (hora)", formatarHora(objeto.str("MovedAtTime")))
-
-            Spacer(modifier = Modifier.height(4.dp))
-
+            Spacer(Modifier.height(4.dp))
         }
     }
 }
 
 @Composable
-private fun CampoLinha(label: String, valor: String?) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+private fun CampoCell(label: String, valor: String?, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         Text(
-            text       = "$label:",
+            text       = label,
             style      = MaterialTheme.typography.bodySmall,
             color      = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontWeight = FontWeight.Medium,
-            modifier   = Modifier.width(160.dp)
+            fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.width(6.dp))
         Text(
-            text     = valor ?: "—",
-            style    = MaterialTheme.typography.bodyMedium,
-            color    = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.weight(1f)
+            text  = valor ?: "—",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
-    Spacer(modifier = Modifier.height(2.dp))
 }
 
-/** Extrai string de um campo JsonObject; retorna null se ausente, nulo ou vazio. */
 private fun JsonObject.str(key: String): String? {
     val el = this.get(key) ?: return null
     if (el.isJsonNull) return null
-    val s = el.asString
-    return if (s.isBlank() || s == "null") null else s
+    return try {
+        val s = el.asString
+        if (s.isBlank() || s == "null") null else s
+    } catch (e: Exception) {
+        el.toString().takeIf { it.isNotBlank() }
+    }
 }
 
-/** "2022-11-17" → "17/11/2022". Null ou inválido → "—". */
 private fun formatarData(raw: String?): String {
     if (raw == null) return "—"
     val p = raw.split("-")
     return if (p.size == 3) "${p[2]}/${p[1]}/${p[0]}" else raw
 }
 
-/** "09:07:40" → "09:07". Null → "—". */
 private fun formatarHora(raw: String?): String {
     if (raw == null) return "—"
     val p = raw.split(":")
