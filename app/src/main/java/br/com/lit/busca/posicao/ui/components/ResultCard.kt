@@ -34,6 +34,8 @@ fun ResultCard(
 
     // Pares (label abreviado, valor) na ordem de exibição
     val campos = listOf(
+        "Material"   to objeto.str("Material"),
+        "Descrição"  to objeto.str("MaterialDescription"),
         "Armazém"    to objeto.str("Lgnum"),
         "Tp. Armaz." to objeto.str("StorageType"),
         "Área"       to objeto.str("StorageArea"),
@@ -46,9 +48,7 @@ fun ResultCard(
         "Dt. Mov."   to formatarData(objeto.str("MovedAtDate")),
         "Hr. Mov."   to formatarHora(objeto.str("MovedAtTime")),
         "Dt. Cont."  to formatarData(objeto.str("CountDate")),
-        "Hr. Cont."  to formatarHora(objeto.str("CountTime")),
-        "Material"   to objeto.str("Material"),
-        "Descrição"  to objeto.str("MaterialDescription")
+        "Hr. Cont."  to formatarHora(objeto.str("CountTime"))
     )
 
     Card(
